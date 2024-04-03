@@ -48,6 +48,10 @@ public class PagamentoService {
 		return this.pagamentoDao.findAll();
 	}
 	
+	public Pagamento buscarPagamentoPorId(Long pagamentoId) {
+		return this.pagamentoDao.findById(pagamentoId).get();
+	}
+	
 	public Pagamento estonerPagamento(Long pagamentoId) {
 		Pagamento pagamento = this.pagamentoDao.findById(pagamentoId).get();
 		pagamento.getTransacao().getDescricao().setStatus(StatusPagamento.CANCELADO);

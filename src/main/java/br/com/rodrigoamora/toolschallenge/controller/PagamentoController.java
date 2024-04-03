@@ -31,6 +31,11 @@ public class PagamentoController {
 		return this.pagamentoService.listarTodos();
 	}
 	
+	@GetMapping("/{pagamentoId}")
+	public Pagamento buscarPagamentoPorId(@PathVariable(name = "pagamentoId") Long pagamentoId) {
+		return this.pagamentoService.buscarPagamentoPorId(pagamentoId);
+	}
+	
 	@PutMapping("/estornar/{pagamentoId}")
 	public Pagamento estornarPagamento(@PathVariable(name = "pagamentoId") Long pagamentoId) {
 		return this.pagamentoService.estonerPagamento(pagamentoId);
