@@ -45,7 +45,8 @@ public class Transacao {
 	}
 	
 	public String getCartao() {
-		return cartao;
+		String cartaoSubSequence = cartao.subSequence(4, 12).toString();
+		return cartao.replace(cartaoSubSequence, "********");
 	}
 	
 	public void setCartao(String cartao) {
