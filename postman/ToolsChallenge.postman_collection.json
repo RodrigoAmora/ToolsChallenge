@@ -1,0 +1,95 @@
+{
+	"info": {
+		"_postman_id": "30e540f3-bc30-46b5-9986-96762a8f41da",
+		"name": "ToolsChallenge",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "8543961"
+	},
+	"item": [
+		{
+			"name": "RealizarPagamento",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"transacao\": {\n        \"cartao\": \"1111222233334444\",\n        \"descricao\": {\n            \"valor\": 100.0,\n            \"estabelecimento\": \"Starbucks\",\n            \"nsu\": \"1234567890\"\n        },\n        \"formaPagamento\": {\n            \"tipo\": \"AVISTA\",\n            \"parcelas\": 1\n        }\n    }\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/pagamento",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"pagamento"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "ListarPagamentos",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/pagamento/listarTodos",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"pagamento",
+						"listarTodos"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "EstornarPagamento",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/pagamento/estornar/1",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"pagamento",
+						"estornar",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "BuscarPagamentoPorId",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/pagamento/1",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"pagamento",
+						"1"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
