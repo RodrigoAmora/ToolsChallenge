@@ -23,7 +23,7 @@ public class PagamentoController {
 	
 	@PostMapping
 	public Pagamento realizarPagamento(@RequestBody Pagamento pagamento) {
-		return this.pagamentoService.saveOrEdit(pagamento);
+		return this.pagamentoService.realizarPagamento(pagamento);
 	}
 
 	@GetMapping("/listarTodos")

@@ -19,7 +19,7 @@ public class PagamentoService {
 	@Autowired
 	PagamentoRepository pagamentoDao;
 	
-	public Pagamento saveOrEdit(Pagamento pagamento) {
+	public Pagamento realizarPagamento(Pagamento pagamento) {
 		String padraoDataHora = "dd/MM/yyyy HH:mm:ss";
 		String dataHoraFormatada = FormatadorDataHora.formatarDataHora(padraoDataHora);
 		
