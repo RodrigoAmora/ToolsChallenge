@@ -38,7 +38,7 @@ public class PagamentoController {
 	
 	@PutMapping("/estornar/{pagamentoId}")
 	public Pagamento estornarPagamento(@PathVariable(name = "pagamentoId") Long pagamentoId) {
-		return this.pagamentoService.estonerPagamento(pagamentoId);
+		return this.pagamentoService.estonarPagamento(pagamentoId);
 	}
 	
 }
