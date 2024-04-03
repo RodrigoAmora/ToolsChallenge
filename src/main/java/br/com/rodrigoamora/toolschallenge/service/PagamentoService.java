@@ -1,7 +1,5 @@
 package br.com.rodrigoamora.toolschallenge.service;
 
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.UUID;
 
@@ -10,7 +8,10 @@ import org.springframework.stereotype.Component;
 
 import br.com.rodrigoamora.toolschallenge.entity.Pagamento;
 import br.com.rodrigoamora.toolschallenge.entity.StatusPagamento;
+import br.com.rodrigoamora.toolschallenge.entity.TipoFormaPagamento;
+import br.com.rodrigoamora.toolschallenge.exception.BusinessValidationException;
 import br.com.rodrigoamora.toolschallenge.repository.PagamentoRepository;
+import br.com.rodrigoamora.toolschallenge.util.FormatadorDataHora;
 
 @Component
 public class PagamentoService {
@@ -19,15 +20,26 @@ public class PagamentoService {
 	PagamentoRepository pagamentoDao;
 	
 	public Pagamento saveOrEdit(Pagamento pagamento) {
-		pagamento.getTransacao().getDescricao().setDataHora(this.formatarDataHora());
-		pagamento.getTransacao().getDescricao().setStatus(StatusPagamento.AUTORIZADO);
+		String padraoDataHora = "dd/MM/yyyy HH:mm:ss";
+		String dataHoraFormatada = FormatadorDataHora.formatarDataHora(padraoDataHora);
+		
+		pagamento.getTransacao().getDescricao().setDataHora(dataHoraFormatada);
+		
+		TipoFormaPagamento tipoFormaPagamento = pagamento.getTransacao().getFormaPagamento().getTipo();
+		Integer parcelas = pagamento.getTransacao().getFormaPagamento().getParcelas();
+		
+		if (tipoFormaPagamento == TipoFormaPagamento.AVISTA && parcelas > 1) {
+			throw new BusinessValidationException("Tipo de pagamento a vista nao pode ter mais que 1 parcela.");
+		}
+		
+		if ((tipoFormaPagamento == TipoFormaPagamento.PARCELADO_EMISSOR || tipoFormaPagamento == TipoFormaPagamento.PARCELADO_LOJA)
+				&& parcelas < 2 ) {
+			throw new BusinessValidationException("Tipo de pagamento parcelado precisa ter no minimo 2 parcelas.");
+		}
 		
 		long codigoAutorizacao = Math.abs(UUID.randomUUID().getMostSignificantBits());
 		pagamento.getTransacao().getDescricao().setCodigoAutorizacao(codigoAutorizacao);
-		
-//		if (pagamento.getTransacao().getFormaPagamento().getTipo() == TipoFormaPagamento.AVISTA) {
-//			pagamento.getTransacao().getFormaPagamento().setParcelas(1);
-//		}
+		pagamento.getTransacao().getDescricao().setStatus(StatusPagamento.AUTORIZADO);
 		
 		return this.pagamentoDao.save(pagamento);
 	}
@@ -36,9 +48,10 @@ public class PagamentoService {
 		return this.pagamentoDao.findAll();
 	}
 	
-	private String formatarDataHora() {
-		LocalDateTime localDateTime = LocalDateTime.now();
-		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
-		return formatter.format(localDateTime);
+	public Pagamento estonerPagamento(Long pagamentoId) {
+		Pagamento pagamento = this.pagamentoDao.findById(pagamentoId).get();
+		pagamento.getTransacao().getDescricao().setStatus(StatusPagamento.CANCELADO);
+		return this.pagamentoDao.save(pagamento);
 	}
+	
 }
