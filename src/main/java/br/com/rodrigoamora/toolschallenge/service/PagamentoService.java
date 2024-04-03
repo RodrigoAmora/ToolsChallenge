@@ -25,17 +25,7 @@ public class PagamentoService {
 		
 		pagamento.getTransacao().getDescricao().setDataHora(dataHoraFormatada);
 		
-		TipoFormaPagamento tipoFormaPagamento = pagamento.getTransacao().getFormaPagamento().getTipo();
-		Integer parcelas = pagamento.getTransacao().getFormaPagamento().getParcelas();
-		
-		if (tipoFormaPagamento == TipoFormaPagamento.AVISTA && parcelas > 1) {
-			throw new BusinessValidationException("Tipo de pagamento a vista nao pode ter mais que 1 parcela.");
-		}
-		
-		if ((tipoFormaPagamento == TipoFormaPagamento.PARCELADO_EMISSOR || tipoFormaPagamento == TipoFormaPagamento.PARCELADO_LOJA)
-				&& parcelas < 2 ) {
-			throw new BusinessValidationException("Tipo de pagamento parcelado precisa ter no minimo 2 parcelas.");
-		}
+		this.verificarParcelasComTipoDePagamento(pagamento);
 		
 		long codigoAutorizacao = Math.abs(UUID.randomUUID().getMostSignificantBits());
 		pagamento.getTransacao().getDescricao().setCodigoAutorizacao(codigoAutorizacao);
@@ -58,4 +48,19 @@ public class PagamentoService {
 		return this.pagamentoDao.save(pagamento);
 	}
 	
+	private Boolean verificarParcelasComTipoDePagamento(Pagamento pagamento) {
+		TipoFormaPagamento tipoFormaPagamento = pagamento.getTransacao().getFormaPagamento().getTipo();
+		Integer parcelas = pagamento.getTransacao().getFormaPagamento().getParcelas();
+		
+		if (tipoFormaPagamento == TipoFormaPagamento.AVISTA && parcelas > 1) {
+			throw new BusinessValidationException("Tipo de pagamento a vista nao pode ter mais que 1 parcela.");
+		}
+		
+		if ((tipoFormaPagamento == TipoFormaPagamento.PARCELADO_EMISSOR || tipoFormaPagamento == TipoFormaPagamento.PARCELADO_LOJA)
+				&& parcelas < 2 ) {
+			throw new BusinessValidationException("Tipo de pagamento parcelado precisa ter no minimo 2 parcelas.");
+		}
+		
+		return true;
+	}
 }
