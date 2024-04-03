@@ -1,12 +1,15 @@
 package br.com.rodrigoamora.toolschallenge.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
-import jakarta.validation.constraints.NotNull;
 
 @Entity
 @Table(name = "pagamentos")
@@ -14,47 +17,27 @@ public class Pagamento {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@JsonIgnore
 	private Long id;
 	
-	@NotNull
-	private String cartao;
-	
-	@OneToOne(optional=false)
-	private Descricao descricao;
-	
-	@OneToOne(optional=false)
-	private FormaPagamento formaPagamento;
-	
+	@OneToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name = "transacao_id", referencedColumnName = "id")
+	private Transacao transacao;
+
 	public Long getId() {
 		return id;
 	}
-	
+
 	public void setId(Long id) {
 		this.id = id;
 	}
-	
-	public String getCartao() {
-		return cartao;
+
+	public Transacao getTransacao() {
+		return transacao;
 	}
-	
-	public void setCartao(String cartao) {
-		this.cartao = cartao;
-	}
-	
-	public Descricao getDescricao() {
-		return descricao;
-	}
-	
-	public void setDescricao(Descricao descricao) {
-		this.descricao = descricao;
-	}
-	
-	public FormaPagamento getFormaPagamento() {
-		return formaPagamento;
-	}
-	
-	public void setFormaPagamento(FormaPagamento formaPagamento) {
-		this.formaPagamento = formaPagamento;
+
+	public void setTransacao(Transacao transacao) {
+		this.transacao = transacao;
 	}
 	
 }

@@ -1,11 +1,17 @@
 package br.com.rodrigoamora.toolschallenge.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
@@ -15,15 +21,21 @@ import jakarta.validation.constraints.Positive;
 public class FormaPagamento {
 
 	@Id
-    @GeneratedValue(strategy= GenerationType.AUTO)
+    @GeneratedValue(strategy= GenerationType.IDENTITY)
+	@JsonIgnore
 	private Long id;
 	
+	@NotNull
 	@Enumerated(EnumType.STRING)
-	private TipoFormaPagamento formaPagamento;
+	private TipoFormaPagamento tipo;
 	
 	@NotNull
 	@Positive
 	private Integer parcelas;
+	
+	@OneToOne(mappedBy = "formaPagamento")
+    @JsonIgnore
+    private Transacao transacao;
 	
 	public Long getId() {
 		return id;
@@ -32,21 +44,29 @@ public class FormaPagamento {
 	public void setId(Long id) {
 		this.id = id;
 	}
+	
+	public TipoFormaPagamento getTipo() {
+		return tipo;
+	}
 
-	public TipoFormaPagamento getFormaPagamento() {
-		return formaPagamento;
+	public void setTipo(TipoFormaPagamento tipo) {
+		this.tipo = tipo;
 	}
-	
-	public void setFormaPagamento(TipoFormaPagamento formaPagamento) {
-		this.formaPagamento = formaPagamento;
-	}
-	
+
 	public Integer getParcelas() {
 		return parcelas;
 	}
 	
 	public void setParcelas(Integer parcelas) {
 		this.parcelas = parcelas;
+	}
+
+	public Transacao getTransacao() {
+		return transacao;
+	}
+
+	public void setTransacao(Transacao transacao) {
+		this.transacao = transacao;
 	}
 	
 }

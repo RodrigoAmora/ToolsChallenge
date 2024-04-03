@@ -1,13 +1,16 @@
 package br.com.rodrigoamora.toolschallenge.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
-import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Positive;
 
 @Entity
@@ -15,28 +18,38 @@ import jakarta.validation.constraints.Positive;
 public class Descricao {
 
 	@Id
-    @GeneratedValue(strategy= GenerationType.AUTO)
+    @GeneratedValue(strategy= GenerationType.IDENTITY)
+	@JsonIgnore
     private Long id;
 	
-	@NotNull
+	@NotBlank
 	@Positive
 	private Double valor;
 	
-	@NotNull
 	private String dataHora;
 	
-	@NotNull
+	@NotBlank
 	private String estabelecimento;
 	
-	@NotNull
+	@NotBlank
 	private String nsu;
 	
-	@NotNull
 	private Long codigoAutorizacao;
 	
-	@NotNull
 	@Enumerated(EnumType.STRING)
 	private StatusPagamento status;
+	
+    @OneToOne(mappedBy = "descricao")
+    @JsonIgnore
+    private Transacao transacao;
+	
+    public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
 	
 	public Double getValor() {
 		return valor;
@@ -84,6 +97,14 @@ public class Descricao {
 	
 	public void setStatus(StatusPagamento status) {
 		this.status = status;
+	}
+
+	public Transacao getTransacao() {
+		return transacao;
+	}
+
+	public void setTransacao(Transacao transacao) {
+		this.transacao = transacao;
 	}
 	
 }
