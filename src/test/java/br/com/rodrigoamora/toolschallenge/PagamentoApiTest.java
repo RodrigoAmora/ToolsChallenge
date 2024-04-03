@@ -38,7 +38,7 @@ public class PagamentoApiTest {
 	private PagamentoService pagamentoService;
 	
 	@Test
-    public void postUserTest() throws Exception{
+    public void realizarPagamentoTest() throws Exception{
 		//DESCRICAO
         Descricao descricao = new Descricao();
         long codigoAutorizacao = Math.abs(UUID.randomUUID().getMostSignificantBits());
