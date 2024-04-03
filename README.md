@@ -18,9 +18,10 @@ Este projeto usa o Java 21 e as seguintes dependências:
 * Swagger
 * JPA
 * Devtools
+* jUnit
 
 Testes:
 -------
-O projeto possui testes unitátios, teste de integração e testes de API.
+O projeto possui testes de API.
 
 <hr>
