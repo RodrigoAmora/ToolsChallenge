@@ -18,7 +18,6 @@ public class Transacao {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	@JsonIgnore
 	private Long id;
 	
 	@NotNull
