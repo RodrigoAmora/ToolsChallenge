@@ -10,11 +10,14 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.Import;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import br.com.rodrigoamora.toolschallenge.config.WebSecurityConfig;
 import br.com.rodrigoamora.toolschallenge.controller.PagamentoController;
 import br.com.rodrigoamora.toolschallenge.entity.Descricao;
 import br.com.rodrigoamora.toolschallenge.entity.FormaPagamento;
@@ -25,7 +28,10 @@ import br.com.rodrigoamora.toolschallenge.service.PagamentoService;
 import io.restassured.http.ContentType;
 
 @RunWith(SpringRunner.class)
+//@RunWith(JUnit4.class)
+@Import(WebSecurityConfig.class)
 @WebMvcTest(PagamentoController.class)
+@ActiveProfiles("test")
 public class PagamentoApiTest {
 
 	@Autowired
@@ -36,7 +42,6 @@ public class PagamentoApiTest {
 	
 	@MockBean
 	private PagamentoService pagamentoService;
-	
 	
 	@Test
     public void realizarPagamentoTest() throws Exception {
@@ -60,7 +65,6 @@ public class PagamentoApiTest {
         transacao.setFormaPagamento(formaPagamento);
         
         Pagamento pagamento = new Pagamento();
-        pagamento.setId(1L);
         pagamento.setTransacao(transacao);
         
         
@@ -102,13 +106,13 @@ public class PagamentoApiTest {
 //        
 //        String a = this.objectMapper.writeValueAsString(pagamento);
 //        
-//        String endpointPagamento = "/pagamento";
+//        String endpointPagamento = "http://localhost:8080/pagamento";
 //        
 //		mvc.perform(post(endpointPagamento)//.with(digest().)
 //					.contentType(MediaType.APPLICATION_JSON)
 //					.content(a))
 //			      	.andExpect(status().isOk())
-//			      	.andReturn();
+//			      	.andExpect(jsonPath("$.transacao").value(1));
 //	}
-	
+
 }
