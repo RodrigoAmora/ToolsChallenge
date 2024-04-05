@@ -5,7 +5,11 @@ Projeto de uma API em Java e Spring Boot para simular pagamentos.
 
 Endpoints:
 ----------
-Este projeto está usando o Swagger, para consultar os endpoints do projeto, verifique o endreço: `<URL_DO_PORJETO>/swagger-ui.html` <br>
+Você pode consultar a documentação dos endpoints através do Swagger e do Redoc.<br>
+
+Para consultar a documentação dos endpoints através do Swagger, consulte o endereço: `<URL_DO_PORJETO>/swagger-ui.html` <br>
+
+Para consultar a documentação dos endpoints através do Redoc, consulte o endereço: `<URL_DO_PORJETO>/redoc` <br>
 
 Caso prefira usar o Postman, na pasta collections tem o arquivo com a collection para usar os endpoints via Postman.
 
@@ -19,6 +23,11 @@ Este projeto usa o Java 21 e as seguintes dependências:
 * JPA
 * Devtools
 * jUnit
+* Rest-Assured
+
+Banco de dados:
+---------------
+O projeto usa o MySQL para os ambientes de desenvolvimento e produção e o H2 para o ambiente de teste.
 
 Testes:
 -------
