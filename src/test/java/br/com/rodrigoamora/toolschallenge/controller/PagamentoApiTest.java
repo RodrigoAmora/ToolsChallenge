@@ -52,28 +52,7 @@ public class PagamentoApiTest {
 	
 	@Test
     public void realizarPagamentoTest() throws Exception {
-		//DESCRICAO
-        Descricao descricao = new Descricao();
-        long codigoAutorizacao = Math.abs(UUID.randomUUID().getMostSignificantBits());
-        descricao.setCodigoAutorizacao(codigoAutorizacao);
-        
-        descricao.setEstabelecimento("Starbucks");
-        descricao.setNsu("1234567890");
-        descricao.setValor(10.50);
-        
-        //FORMA DE PAGAMENTO
-        FormaPagamento formaPagamento = new FormaPagamento();
-        formaPagamento.setParcelas(1);
-        formaPagamento.setTipo(TipoFormaPagamento.AVISTA);
-        
-        Transacao transacao = new Transacao();
-        transacao.setCartao("1111222233334444");
-        transacao.setDescricao(descricao);
-        transacao.setFormaPagamento(formaPagamento);
-        
-        Pagamento pagamento = new Pagamento();
-        pagamento.setTransacao(transacao);
-        
+		Pagamento pagamento = this.instanciarPagamento();
         var pagamentoJson = this.pagamentoToJson(pagamento);
         
         given()
@@ -87,28 +66,7 @@ public class PagamentoApiTest {
 	
 	@Test
     public void estornarPagamentoTest() throws Exception {
-		//DESCRICAO
-        Descricao descricao = new Descricao();
-        long codigoAutorizacao = Math.abs(UUID.randomUUID().getMostSignificantBits());
-        descricao.setCodigoAutorizacao(codigoAutorizacao);
-        
-        descricao.setEstabelecimento("Starbucks 2");
-        descricao.setNsu("1234567890");
-        descricao.setValor(10.50);
-        
-        //FORMA DE PAGAMENTO
-        FormaPagamento formaPagamento = new FormaPagamento();
-        formaPagamento.setParcelas(1);
-        formaPagamento.setTipo(TipoFormaPagamento.AVISTA);
-        
-        Transacao transacao = new Transacao();
-        transacao.setCartao("1111222233334444");
-        transacao.setDescricao(descricao);
-        transacao.setFormaPagamento(formaPagamento);
-        
-        Pagamento pagamento = new Pagamento();
-        pagamento.setTransacao(transacao);
-        
+		Pagamento pagamento = this.instanciarPagamento();
         var pagamentoJson = this.pagamentoToJson(pagamento);
         
         Response response = given()
@@ -134,28 +92,7 @@ public class PagamentoApiTest {
 	
 	@Test
     public void listarTodosPagamentosTest() throws Exception {
-		//DESCRICAO
-        Descricao descricao = new Descricao();
-        long codigoAutorizacao = Math.abs(UUID.randomUUID().getMostSignificantBits());
-        descricao.setCodigoAutorizacao(codigoAutorizacao);
-        
-        descricao.setEstabelecimento("Starbucks 2");
-        descricao.setNsu("1234567890");
-        descricao.setValor(10.50);
-        
-        //FORMA DE PAGAMENTO
-        FormaPagamento formaPagamento = new FormaPagamento();
-        formaPagamento.setParcelas(1);
-        formaPagamento.setTipo(TipoFormaPagamento.AVISTA);
-        
-        Transacao transacao = new Transacao();
-        transacao.setCartao("1111222233334444");
-        transacao.setDescricao(descricao);
-        transacao.setFormaPagamento(formaPagamento);
-        
-        Pagamento pagamento = new Pagamento();
-        pagamento.setTransacao(transacao);
-        
+		Pagamento pagamento = this.instanciarPagamento();
         var pagamentoJson = this.pagamentoToJson(pagamento);
         
         given()
@@ -174,28 +111,7 @@ public class PagamentoApiTest {
 	
 	@Test
     public void buscarPagamentoPorId() throws Exception {
-		//DESCRICAO
-        Descricao descricao = new Descricao();
-        long codigoAutorizacao = Math.abs(UUID.randomUUID().getMostSignificantBits());
-        descricao.setCodigoAutorizacao(codigoAutorizacao);
-        
-        descricao.setEstabelecimento("Starbucks 2");
-        descricao.setNsu("1234567890");
-        descricao.setValor(10.50);
-        
-        //FORMA DE PAGAMENTO
-        FormaPagamento formaPagamento = new FormaPagamento();
-        formaPagamento.setParcelas(1);
-        formaPagamento.setTipo(TipoFormaPagamento.AVISTA);
-        
-        Transacao transacao = new Transacao();
-        transacao.setCartao("1111222233334444");
-        transacao.setDescricao(descricao);
-        transacao.setFormaPagamento(formaPagamento);
-        
-        Pagamento pagamento = new Pagamento();
-        pagamento.setTransacao(transacao);
-        
+        Pagamento pagamento = this.instanciarPagamento();
         var pagamentoJson = this.pagamentoToJson(pagamento);
         
         Response response = given()
@@ -217,6 +133,32 @@ public class PagamentoApiTest {
         .body("transacao.id", equalTo(pagamentoResponseId))
         .statusCode(200);
     }
+	
+	private Pagamento instanciarPagamento() {
+		//DESCRICAO
+        Descricao descricao = new Descricao();
+        long codigoAutorizacao = Math.abs(UUID.randomUUID().getMostSignificantBits());
+        descricao.setCodigoAutorizacao(codigoAutorizacao);
+        
+        descricao.setEstabelecimento("Starbucks");
+        descricao.setNsu("1234567890");
+        descricao.setValor(10.50);
+        
+        //FORMA DE PAGAMENTO
+        FormaPagamento formaPagamento = new FormaPagamento();
+        formaPagamento.setParcelas(1);
+        formaPagamento.setTipo(TipoFormaPagamento.AVISTA);
+        
+        Transacao transacao = new Transacao();
+        transacao.setCartao("1111222233334444");
+        transacao.setDescricao(descricao);
+        transacao.setFormaPagamento(formaPagamento);
+        
+        Pagamento pagamento = new Pagamento();
+        pagamento.setTransacao(transacao);
+        
+        return pagamento;
+	}
 	
 	private String pagamentoToJson(Pagamento pagamento) throws JsonMappingException, JsonProcessingException {
 		return this.objectMapper.writeValueAsString(pagamento);
