@@ -5,7 +5,7 @@ Projeto de uma API em Java e Spring Boot para simular pagamentos.
 
 Endpoints:
 ----------
-Você pode consultar a documentação dos endpoints através do Swagger e do Redoc.<br>
+A documentação dos endpoints da API pode ser vista através do Swagger e do Redoc.<br>
 
 Para consultar a documentação dos endpoints através do Swagger: `<URL_DO_PORJETO>/swagger-ui.html` <br>
 
