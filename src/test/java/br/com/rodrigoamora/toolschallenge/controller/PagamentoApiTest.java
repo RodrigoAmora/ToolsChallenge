@@ -6,7 +6,7 @@ import static org.hamcrest.core.IsNull.notNullValue;
 
 import java.util.UUID;
 
-import org.junit.jupiter.api.AfterEach;
+import org.junit.BeforeClass;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.json.AutoConfigureJsonTesters;
@@ -26,7 +26,9 @@ import br.com.rodrigoamora.toolschallenge.entity.Pagamento;
 import br.com.rodrigoamora.toolschallenge.entity.TipoFormaPagamento;
 import br.com.rodrigoamora.toolschallenge.entity.Transacao;
 import br.com.rodrigoamora.toolschallenge.service.PagamentoService;
+import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
+import io.restassured.response.Response;
 
 
 @Import(WebSecurityConfig.class)
@@ -45,11 +47,9 @@ public class PagamentoApiTest {
 	@MockBean
 	private PagamentoService pagamentoService;
 	
-	@AfterEach
-	public void clear() {
-//		given()
-//        .contentType(ContentType.JSON)
-//        .delete("pagamento").then();
+	@BeforeClass
+	public static void setup() {
+		RestAssured.baseURI = "http://localhost:8080";
 	}
 	
 	@Test
@@ -105,7 +105,6 @@ public class PagamentoApiTest {
         formaPagamento.setTipo(TipoFormaPagamento.AVISTA);
         
         Transacao transacao = new Transacao();
-        transacao.setId(1L);
         transacao.setCartao("1111222233334444");
         transacao.setDescricao(descricao);
         transacao.setFormaPagamento(formaPagamento);
@@ -115,13 +114,23 @@ public class PagamentoApiTest {
         
         var pagamentoJson = this.objectMapper.writeValueAsString(pagamento);
         
-        this.pagamentoService.realizarPagamento(pagamento);
+        Response response = given()
+                .contentType(ContentType.JSON)
+                .body(pagamentoJson)
+                .when()
+                .post("/pagamento");
+                
+        String responseBody = response.getBody().asString();
+        Pagamento pagamentoResponse = this.objectMapper.readValue(responseBody, Pagamento.class);
+        
+        var pagamentoResponseId = Integer.parseInt(pagamentoResponse.getTransacao().getId().toString());
         
         given()
         .contentType(ContentType.JSON)
         .body(pagamentoJson)
-        .put("/pagamento/estornar/1")
+        .put("/pagamento/estornar/"+pagamentoResponseId)
         .then()
+        .body("transacao.id", equalTo(pagamentoResponseId))
         .body("transacao.descricao.status", equalTo("CANCELADO"))
         .statusCode(200);
     }
@@ -177,7 +186,6 @@ public class PagamentoApiTest {
         formaPagamento.setTipo(TipoFormaPagamento.AVISTA);
         
         Transacao transacao = new Transacao();
-        transacao.setId(1L);
         transacao.setCartao("1111222233334444");
         transacao.setDescricao(descricao);
         transacao.setFormaPagamento(formaPagamento);
@@ -185,20 +193,27 @@ public class PagamentoApiTest {
         Pagamento pagamento = new Pagamento();
         pagamento.setTransacao(transacao);
         
-//        this.pagamentoService.realizarPagamento(pagamento);
+        this.pagamentoService.realizarPagamento(pagamento);
         
         var pagamentoJson = this.objectMapper.writeValueAsString(pagamento);
         
-        given()
+        Response response = given()
         .contentType(ContentType.JSON)
         .body(pagamentoJson)
+        .when()
         .post("/pagamento");
+        
+        String responseBody = response.getBody().asString();
+        Pagamento pagamentoResponse = this.objectMapper.readValue(responseBody, Pagamento.class);
+        
+        var pagamentoResponseId = Integer.parseInt(pagamentoResponse.getTransacao().getId().toString());
         
         given()
         .contentType(ContentType.JSON)
-        .get("/pagamento/1")
+        .when()
+        .get("/pagamento/"+pagamentoResponseId)
         .then()
-        .body("transacao.id", notNullValue())
+        .body("transacao.id", equalTo(pagamentoResponseId))
         .statusCode(200);
     }
 	
