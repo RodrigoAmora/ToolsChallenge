@@ -15,8 +15,9 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
 import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.web.servlet.MockMvc;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import br.com.rodrigoamora.toolschallenge.config.WebSecurityConfig;
@@ -37,9 +38,6 @@ import io.restassured.response.Response;
 @ActiveProfiles("test")
 @AutoConfigureJsonTesters
 public class PagamentoApiTest {
-
-	@Autowired
-	private MockMvc mvc;
 	
 	@Autowired
 	private ObjectMapper objectMapper;
@@ -76,8 +74,7 @@ public class PagamentoApiTest {
         Pagamento pagamento = new Pagamento();
         pagamento.setTransacao(transacao);
         
-        
-        var pagamentoJson = this.objectMapper.writeValueAsString(pagamento);
+        var pagamentoJson = this.pagamentoToJson(pagamento);
         
         given()
         .contentType(ContentType.JSON)
@@ -112,16 +109,16 @@ public class PagamentoApiTest {
         Pagamento pagamento = new Pagamento();
         pagamento.setTransacao(transacao);
         
-        var pagamentoJson = this.objectMapper.writeValueAsString(pagamento);
+        var pagamentoJson = this.pagamentoToJson(pagamento);
         
         Response response = given()
-                .contentType(ContentType.JSON)
-                .body(pagamentoJson)
-                .when()
-                .post("/pagamento");
-                
+        .contentType(ContentType.JSON)
+        .body(pagamentoJson)
+        .when()
+        .post("/pagamento");
+        
         String responseBody = response.getBody().asString();
-        Pagamento pagamentoResponse = this.objectMapper.readValue(responseBody, Pagamento.class);
+        Pagamento pagamentoResponse = this.jsonToPagamento(responseBody);
         
         var pagamentoResponseId = Integer.parseInt(pagamentoResponse.getTransacao().getId().toString());
         
@@ -136,7 +133,7 @@ public class PagamentoApiTest {
     }
 	
 	@Test
-    public void listarPagamentosTest() throws Exception {
+    public void listarTodosPagamentosTest() throws Exception {
 		//DESCRICAO
         Descricao descricao = new Descricao();
         long codigoAutorizacao = Math.abs(UUID.randomUUID().getMostSignificantBits());
@@ -152,7 +149,6 @@ public class PagamentoApiTest {
         formaPagamento.setTipo(TipoFormaPagamento.AVISTA);
         
         Transacao transacao = new Transacao();
-        transacao.setId(1L);
         transacao.setCartao("1111222233334444");
         transacao.setDescricao(descricao);
         transacao.setFormaPagamento(formaPagamento);
@@ -160,7 +156,14 @@ public class PagamentoApiTest {
         Pagamento pagamento = new Pagamento();
         pagamento.setTransacao(transacao);
         
-        this.pagamentoService.realizarPagamento(pagamento);
+        var pagamentoJson = this.pagamentoToJson(pagamento);
+        
+        given()
+        .contentType(ContentType.JSON)
+        .body(pagamentoJson)
+        .when()
+        .post("/pagamento");
+        
         
         given()
         .contentType(ContentType.JSON)
@@ -193,9 +196,7 @@ public class PagamentoApiTest {
         Pagamento pagamento = new Pagamento();
         pagamento.setTransacao(transacao);
         
-        this.pagamentoService.realizarPagamento(pagamento);
-        
-        var pagamentoJson = this.objectMapper.writeValueAsString(pagamento);
+        var pagamentoJson = this.pagamentoToJson(pagamento);
         
         Response response = given()
         .contentType(ContentType.JSON)
@@ -204,7 +205,7 @@ public class PagamentoApiTest {
         .post("/pagamento");
         
         String responseBody = response.getBody().asString();
-        Pagamento pagamentoResponse = this.objectMapper.readValue(responseBody, Pagamento.class);
+        Pagamento pagamentoResponse = this.jsonToPagamento(responseBody);
         
         var pagamentoResponseId = Integer.parseInt(pagamentoResponse.getTransacao().getId().toString());
         
@@ -216,6 +217,17 @@ public class PagamentoApiTest {
         .body("transacao.id", equalTo(pagamentoResponseId))
         .statusCode(200);
     }
+	
+	private String pagamentoToJson(Pagamento pagamento) throws JsonMappingException, JsonProcessingException {
+		return this.objectMapper.writeValueAsString(pagamento);
+	}
+	
+	private Pagamento jsonToPagamento(String pagamentoResponseBody) throws JsonMappingException, JsonProcessingException {
+		return this.objectMapper.readValue(pagamentoResponseBody, Pagamento.class);
+	}
+	
+//	@Autowired
+//	private MockMvc mvc;
 	
 //	@Test
 //	@WithMockUser
