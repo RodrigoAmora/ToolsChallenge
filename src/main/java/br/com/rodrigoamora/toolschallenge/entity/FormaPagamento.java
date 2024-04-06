@@ -18,7 +18,7 @@ import jakarta.validation.constraints.Positive;
 public class FormaPagamento {
 
 	@Id
-    @GeneratedValue(strategy= GenerationType.IDENTITY)
+    @GeneratedValue(strategy= GenerationType.AUTO)
 	@JsonIgnore
 	private Long id;
 	
