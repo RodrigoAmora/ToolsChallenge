@@ -37,9 +37,11 @@ public class PagamentoService {
 		return this.pagamentoDao.save(pagamento);
 	}
 
-	public List<Pagamento> listarTodos() {
-		return this.pagamentoDao.findAll();
-	}
+	public Page<Pagamento> listarTodos(int page, int size) {
+        PageRequest pageRequest = PageRequest.of(page, size, Sort.Direction.ASC, "id");
+
+        return pagamentoDao.findAll(pageRequest);
+    }
 	
 	public Pagamento buscarPagamentoPorId(Long pagamentoId) {
 		return this.pagamentoDao.findById(pagamentoId).get();
@@ -50,13 +52,6 @@ public class PagamentoService {
 		pagamento.getTransacao().getDescricao().setStatus(StatusPagamento.CANCELADO);
 		return this.pagamentoDao.save(pagamento);
 	}
-	
-	
-	public Page<Pagamento> search(int page, int size) {
-        PageRequest pageRequest = PageRequest.of(page, size, Sort.Direction.ASC, "id");
-
-        return pagamentoDao.findAll(pageRequest);
-    }
 	
 	private Boolean verificarParcelasComTipoDePagamento(Pagamento pagamento) {
 		TipoFormaPagamento tipoFormaPagamento = pagamento.getTransacao().getFormaPagamento().getTipo();

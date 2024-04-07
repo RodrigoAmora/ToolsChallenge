@@ -29,8 +29,7 @@ public class PagamentoController {
 	@GetMapping
 	public Page<Pagamento> listarTodos(@RequestParam(value = "page", required = false, defaultValue = "0") int page,
 									   @RequestParam(value = "size", required = false, defaultValue = "10") int size) {
-		//return this.pagamentoService.listarTodos();
-		return this.pagamentoService.search(page, size);
+		return this.pagamentoService.listarTodos(page, size);
 	}
 	
 	@GetMapping("/{pagamentoId}")
