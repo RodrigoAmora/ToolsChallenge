@@ -2,6 +2,8 @@ package br.com.rodrigoamora.toolschallenge.controller;
 
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -199,8 +201,8 @@ public class PagamentoApiTest {
         .put("/pagamento/"+pagamentoResponseId+"/estornar")
         .then()
         .body("transacao.id", equalTo(pagamentoResponseId))
-        .body("transacao.descricao.status", equalTo(StatusPagamento.CANCELADO.name()))
-        .statusCode(200);
+        .statusCode(200)
+        .body("transacao.descricao.status", equalTo(StatusPagamento.CANCELADO.name()));
     }
 	
 	@Test
@@ -217,9 +219,11 @@ public class PagamentoApiTest {
         
         given()
         .contentType(ContentType.JSON)
-        .get("/pagamento/listarTodos")
+        .get("/pagamento")
         .then()
-        .statusCode(200);
+        .statusCode(200)
+        .body("totalPages", notNullValue())
+        .body("empty", is(false));
     }
 	
 	@Test
@@ -243,8 +247,8 @@ public class PagamentoApiTest {
         .when()
         .get("/pagamento/"+pagamentoResponseId)
         .then()
-        .body("transacao.id", equalTo(pagamentoResponseId))
-        .statusCode(200);
+        .statusCode(200)
+        .body("transacao.id", equalTo(pagamentoResponseId));
     }
 	
 	private Pagamento instanciarPagamento() {
