@@ -1,8 +1,9 @@
-package br.com.rodrigoamora.toolschallenge.controller;
+package br.com.rodrigoamora.toolschallenge.controller.api;
 
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -26,6 +27,11 @@ public class PagamentoController {
 		return this.pagamentoService.realizarPagamento(pagamento);
 	}
 
+	@DeleteMapping
+	public void apagarPagamentos() {
+		this.pagamentoService.apagarPagamentos();
+	}
+	
 	@GetMapping("/listarTodos")
 	public List<Pagamento> listarTodos() {
 		return this.pagamentoService.listarTodos();
