@@ -14,6 +14,6 @@ import br.com.rodrigoamora.toolschallenge.entity.Pagamento;
 public interface PagamentoRepository extends JpaRepository<Pagamento, Long> {
 	
 	@Query("FROM Pagamento p")
-	Page<Pagamento> search(Pageable pageable);
+	Page<Pagamento> findAll(Pageable pageable);
 	
 }

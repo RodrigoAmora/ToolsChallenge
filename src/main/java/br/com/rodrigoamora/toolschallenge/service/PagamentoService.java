@@ -55,7 +55,7 @@ public class PagamentoService {
 	public Page<Pagamento> search(int page, int size) {
         PageRequest pageRequest = PageRequest.of(page, size, Sort.Direction.ASC, "id");
 
-        return pagamentoDao.search(pageRequest);
+        return pagamentoDao.findAll(pageRequest);
     }
 	
 	private Boolean verificarParcelasComTipoDePagamento(Pagamento pagamento) {
