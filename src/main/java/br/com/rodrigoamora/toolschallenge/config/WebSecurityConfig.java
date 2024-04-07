@@ -24,7 +24,8 @@ public class WebSecurityConfig {
         .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
         .authorizeHttpRequests(req -> {
         	req.requestMatchers(HttpMethod.GET, "/").permitAll();
-        	req.requestMatchers("/pagamento/**").permitAll();//Liberando segurança para facilitar testes/validação
+        	//Liberando segurança para facilitar testes/validação
+        	req.requestMatchers("/pagamento/**").permitAll();
             req.anyRequest().authenticated();
         });
         
@@ -33,7 +34,7 @@ public class WebSecurityConfig {
 	
 	@Bean
 	WebSecurityCustomizer webSecurityCustomizer() {
-		return (web) -> web.ignoring().requestMatchers("/ignore2", "/swagger-ui/**", "/swagger-ui.html", "/v3/api-docs/**", "/v2/api-docs/**", "/h2-console/**", "/redoc");
+		return (web) -> web.ignoring().requestMatchers("/ignore2", "/swagger-ui/**", "/swagger-ui.html", "/v3/api-docs/**", "/v2/api-docs/**", "/h2-console/**", "/redoc.html");
 	}
 	
 }
