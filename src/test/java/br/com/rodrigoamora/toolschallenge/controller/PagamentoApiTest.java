@@ -2,7 +2,8 @@ package br.com.rodrigoamora.toolschallenge.controller;
 
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.CoreMatchers.equalTo;
-import static org.hamcrest.core.IsNull.notNullValue;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.UUID;
 
@@ -24,6 +25,7 @@ import br.com.rodrigoamora.toolschallenge.config.WebSecurityConfig;
 import br.com.rodrigoamora.toolschallenge.entity.Descricao;
 import br.com.rodrigoamora.toolschallenge.entity.FormaPagamento;
 import br.com.rodrigoamora.toolschallenge.entity.Pagamento;
+import br.com.rodrigoamora.toolschallenge.entity.StatusPagamento;
 import br.com.rodrigoamora.toolschallenge.entity.TipoFormaPagamento;
 import br.com.rodrigoamora.toolschallenge.entity.Transacao;
 import br.com.rodrigoamora.toolschallenge.service.PagamentoService;
@@ -51,8 +53,84 @@ public class PagamentoApiTest {
 	}
 	
 	@Test
-    public void realizarPagamentoTest() throws Exception {
+    public void realizarPagamentoVistaTest() throws Exception {
 		Pagamento pagamento = this.instanciarPagamento();
+        var pagamentoJson = this.pagamentoToJson(pagamento);
+        
+        Response response = given()
+					        .contentType(ContentType.JSON)
+					        .body(pagamentoJson)
+					        .post("/pagamento");
+		        
+		String responseBody = response.getBody().asString();
+		Pagamento pagamentoResponse = this.jsonToPagamento(responseBody);
+		
+		assertNotNull(pagamentoResponse.getTransacao().getId());
+		assertEquals(pagamentoResponse.getTransacao().getFormaPagamento().getTipo(), TipoFormaPagamento.AVISTA);
+    }
+	
+	@Test
+    public void realizarPagamentoParceladoTest() throws Exception {
+		//DESCRICAO
+        Descricao descricao = new Descricao();
+        long codigoAutorizacao = Math.abs(UUID.randomUUID().getMostSignificantBits());
+        descricao.setCodigoAutorizacao(codigoAutorizacao);
+        
+        descricao.setEstabelecimento("Starbucks");
+        descricao.setNsu("1234567890");
+        descricao.setValor(10.50);
+        
+        //FORMA DE PAGAMENTO
+        FormaPagamento formaPagamento = new FormaPagamento();
+        formaPagamento.setParcelas(2);
+        formaPagamento.setTipo(TipoFormaPagamento.PARCELADO_LOJA);
+        
+        Transacao transacao = new Transacao();
+        transacao.setCartao("1111222233334444");
+        transacao.setDescricao(descricao);
+        transacao.setFormaPagamento(formaPagamento);
+        
+        Pagamento pagamento = new Pagamento();
+        pagamento.setTransacao(transacao);
+        
+        var pagamentoJson = this.pagamentoToJson(pagamento);
+        
+        Response response = given()
+					        .contentType(ContentType.JSON)
+					        .body(pagamentoJson)
+					        .post("/pagamento");
+					        
+        String responseBody = response.getBody().asString();
+        Pagamento pagamentoResponse = this.jsonToPagamento(responseBody);
+        
+        assertNotNull(pagamentoResponse.getTransacao().getId());
+        assertEquals(pagamentoResponse.getTransacao().getFormaPagamento().getTipo(), TipoFormaPagamento.PARCELADO_LOJA);
+    }
+	
+	@Test
+    public void realizarPagamentoVistaComMaisDeUmaParcelaTest() throws Exception {
+		//DESCRICAO
+        Descricao descricao = new Descricao();
+        long codigoAutorizacao = Math.abs(UUID.randomUUID().getMostSignificantBits());
+        descricao.setCodigoAutorizacao(codigoAutorizacao);
+        
+        descricao.setEstabelecimento("Starbucks");
+        descricao.setNsu("1234567890");
+        descricao.setValor(10.50);
+        
+        //FORMA DE PAGAMENTO
+        FormaPagamento formaPagamento = new FormaPagamento();
+        formaPagamento.setParcelas(2);
+        formaPagamento.setTipo(TipoFormaPagamento.AVISTA);
+        
+        Transacao transacao = new Transacao();
+        transacao.setCartao("1111222233334444");
+        transacao.setDescricao(descricao);
+        transacao.setFormaPagamento(formaPagamento);
+        
+        Pagamento pagamento = new Pagamento();
+        pagamento.setTransacao(transacao);
+        
         var pagamentoJson = this.pagamentoToJson(pagamento);
         
         given()
@@ -60,8 +138,43 @@ public class PagamentoApiTest {
         .body(pagamentoJson)
         .post("/pagamento")
         .then()
-        .body("transacao.id", notNullValue())
-        .statusCode(200);
+        .statusCode(403)
+        .body("title", equalTo("Tipo de pagamento a vista nao pode ter mais que 1 parcela."));
+    }
+	
+	@Test
+    public void realizarPagamentoParceladoComUmaParcelaTest() throws Exception {
+		//DESCRICAO
+        Descricao descricao = new Descricao();
+        long codigoAutorizacao = Math.abs(UUID.randomUUID().getMostSignificantBits());
+        descricao.setCodigoAutorizacao(codigoAutorizacao);
+        
+        descricao.setEstabelecimento("Starbucks");
+        descricao.setNsu("1234567890");
+        descricao.setValor(10.50);
+        
+        //FORMA DE PAGAMENTO
+        FormaPagamento formaPagamento = new FormaPagamento();
+        formaPagamento.setParcelas(1);
+        formaPagamento.setTipo(TipoFormaPagamento.PARCELADO_LOJA);
+        
+        Transacao transacao = new Transacao();
+        transacao.setCartao("1111222233334444");
+        transacao.setDescricao(descricao);
+        transacao.setFormaPagamento(formaPagamento);
+        
+        Pagamento pagamento = new Pagamento();
+        pagamento.setTransacao(transacao);
+        
+        var pagamentoJson = this.pagamentoToJson(pagamento);
+        
+        given()
+        .contentType(ContentType.JSON)
+        .body(pagamentoJson)
+        .post("/pagamento")
+        .then()
+        .statusCode(403)
+        .body("title", equalTo("Tipo de pagamento parcelado precisa ter no minimo 2 parcelas."));
     }
 	
 	@Test
@@ -70,10 +183,10 @@ public class PagamentoApiTest {
         var pagamentoJson = this.pagamentoToJson(pagamento);
         
         Response response = given()
-        .contentType(ContentType.JSON)
-        .body(pagamentoJson)
-        .when()
-        .post("/pagamento");
+					        .contentType(ContentType.JSON)
+					        .body(pagamentoJson)
+					        .when()
+					        .post("/pagamento");
         
         String responseBody = response.getBody().asString();
         Pagamento pagamentoResponse = this.jsonToPagamento(responseBody);
@@ -86,7 +199,7 @@ public class PagamentoApiTest {
         .put("/pagamento/estornar/"+pagamentoResponseId)
         .then()
         .body("transacao.id", equalTo(pagamentoResponseId))
-        .body("transacao.descricao.status", equalTo("CANCELADO"))
+        .body("transacao.descricao.status", equalTo(StatusPagamento.CANCELADO.name()))
         .statusCode(200);
     }
 	
@@ -115,10 +228,10 @@ public class PagamentoApiTest {
         var pagamentoJson = this.pagamentoToJson(pagamento);
         
         Response response = given()
-        .contentType(ContentType.JSON)
-        .body(pagamentoJson)
-        .when()
-        .post("/pagamento");
+					        .contentType(ContentType.JSON)
+					        .body(pagamentoJson)
+					        .when()
+					        .post("/pagamento");
         
         String responseBody = response.getBody().asString();
         Pagamento pagamentoResponse = this.jsonToPagamento(responseBody);
