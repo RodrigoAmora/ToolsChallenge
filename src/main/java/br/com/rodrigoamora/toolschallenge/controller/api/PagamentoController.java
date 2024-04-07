@@ -1,15 +1,14 @@
 package br.com.rodrigoamora.toolschallenge.controller.api;
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.com.rodrigoamora.toolschallenge.entity.Pagamento;
@@ -26,20 +25,17 @@ public class PagamentoController {
 	public Pagamento realizarPagamento(@RequestBody Pagamento pagamento) {
 		return this.pagamentoService.realizarPagamento(pagamento);
 	}
-
-	@DeleteMapping
-	public void apagarPagamentos() {
-		this.pagamentoService.apagarPagamentos();
-	}
 	
-	@GetMapping("/listarTodos")
-	public List<Pagamento> listarTodos() {
-		return this.pagamentoService.listarTodos();
+	@GetMapping
+	public Page<Pagamento> listarTodos(@RequestParam(value = "page", required = false, defaultValue = "0") int page,
+									   @RequestParam(value = "size", required = false, defaultValue = "10") int size) {
+		//return this.pagamentoService.listarTodos();
+		return this.pagamentoService.search(page, size);
 	}
 	
 	@GetMapping("/{pagamentoId}")
 	public Pagamento buscarPagamentoPorId(@PathVariable(name = "pagamentoId") Long pagamentoId) {
-		return this.pagamentoService.buscarPagamentoPorId(pagamentoId);
+		return this.pagamentoService.estonarPagamento(pagamentoId);
 	}
 	
 	@PutMapping("/{id}/estornar")

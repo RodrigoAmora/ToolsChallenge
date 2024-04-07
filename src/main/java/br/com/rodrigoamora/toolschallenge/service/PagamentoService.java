@@ -4,6 +4,9 @@ import java.util.List;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Component;
 
 import br.com.rodrigoamora.toolschallenge.entity.Pagamento;
@@ -42,11 +45,18 @@ public class PagamentoService {
 		return this.pagamentoDao.findById(pagamentoId).get();
 	}
 	
-	public Pagamento estonarPagamento(Long pagamentoId) {
-		Pagamento pagamento = this.pagamentoDao.findById(pagamentoId).get();
+	public Pagamento estonarPagamento(Long transacaoId) {
+		Pagamento pagamento = this.pagamentoDao.findById(transacaoId).get();
 		pagamento.getTransacao().getDescricao().setStatus(StatusPagamento.CANCELADO);
 		return this.pagamentoDao.save(pagamento);
 	}
+	
+	
+	public Page<Pagamento> search(int page, int size) {
+        PageRequest pageRequest = PageRequest.of(page, size, Sort.Direction.ASC, "id");
+
+        return pagamentoDao.search(pageRequest);
+    }
 	
 	private Boolean verificarParcelasComTipoDePagamento(Pagamento pagamento) {
 		TipoFormaPagamento tipoFormaPagamento = pagamento.getTransacao().getFormaPagamento().getTipo();
