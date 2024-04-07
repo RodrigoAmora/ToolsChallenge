@@ -42,9 +42,9 @@ public class PagamentoController {
 		return this.pagamentoService.buscarPagamentoPorId(pagamentoId);
 	}
 	
-	@PutMapping("/estornar/{pagamentoId}")
-	public Pagamento estornarPagamento(@PathVariable(name = "pagamentoId") Long pagamentoId) {
-		return this.pagamentoService.estonarPagamento(pagamentoId);
+	@PutMapping("/{id}/estornar")
+	public Pagamento estornarPagamento(@PathVariable(name = "id") Long id) {
+		return this.pagamentoService.estonarPagamento(id);
 	}
 	
 }

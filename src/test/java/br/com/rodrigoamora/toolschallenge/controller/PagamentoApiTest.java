@@ -196,7 +196,7 @@ public class PagamentoApiTest {
         given()
         .contentType(ContentType.JSON)
         .body(pagamentoJson)
-        .put("/pagamento/estornar/"+pagamentoResponseId)
+        .put("/pagamento/"+pagamentoResponseId+"/estornar")
         .then()
         .body("transacao.id", equalTo(pagamentoResponseId))
         .body("transacao.descricao.status", equalTo(StatusPagamento.CANCELADO.name()))
