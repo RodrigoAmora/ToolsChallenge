@@ -28,10 +28,15 @@ Este projeto usa o Java 21 e as seguintes dependências:
 Banco de dados:
 ---------------
 O projeto usa o MySQL para ambiente de desenvolvimento e o H2 para o ambiente de teste.<br>
+
 Para acessar o painel do H2: `<URL_DO_PORJETO>/h2-console`
 
 Testes:
 -------
 O projeto possui testes de API.
+
+Rodando o projeto:
+------------------
+O porjeto usa o Spring Boot, para usar rodá-lo basta executar a classe `ToolschallengeApplication`
 
 <hr>
