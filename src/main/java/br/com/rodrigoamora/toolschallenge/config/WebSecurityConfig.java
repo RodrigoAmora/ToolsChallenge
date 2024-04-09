@@ -2,7 +2,6 @@ package br.com.rodrigoamora.toolschallenge.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -23,7 +22,6 @@ public class WebSecurityConfig {
 
         .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
         .authorizeHttpRequests(req -> {
-        	req.requestMatchers(HttpMethod.GET, "/").permitAll();
         	//Liberando segurança para facilitar testes/validação
         	req.requestMatchers("/pagamento/**").permitAll();
             req.anyRequest().authenticated();
@@ -34,7 +32,7 @@ public class WebSecurityConfig {
 	
 	@Bean
 	WebSecurityCustomizer webSecurityCustomizer() {
-		return (web) -> web.ignoring().requestMatchers("/ignore2", "/swagger-ui/**", "/swagger-ui.html", "/v3/api-docs/**", "/v2/api-docs/**", "/h2-console/**", "/redoc.html", "css/**");
+		return (web) -> web.ignoring().requestMatchers("/ignore2", "/swagger-ui/**", "/swagger-ui.html", "/v3/api-docs/**", "/v2/api-docs/**", "/h2-console/**", "/redoc.html");
 	}
 	
 }
