@@ -44,7 +44,7 @@ public class Transacao {
 	}
 	
 	public String getCartao() {
-		return this.adicionarMascaraCartao();
+		return cartao;
 	}
 	
 	public void setCartao(String cartao) {
@@ -75,8 +75,9 @@ public class Transacao {
 		this.pagamento = pagamento;
 	}
 	
-	private String adicionarMascaraCartao() {
+	public void adicionarMascaraCartao() {
 		String cartaoSubSequence = cartao.subSequence(4, 12).toString();
-		return cartao.replace(cartaoSubSequence, "********");
+		this.setCartao(cartao.replace(cartaoSubSequence, "********"));
 	}
+	
 }
