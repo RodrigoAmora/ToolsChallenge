@@ -57,6 +57,7 @@ public class PagamentoApiTest {
 	@Test
     public void realizarPagamentoVistaTest() throws Exception {
 		Pagamento pagamento = this.instanciarPagamentoVista();
+		
         var pagamentoJson = this.pagamentoToJson(pagamento);
         
         Response response = given()
@@ -69,6 +70,25 @@ public class PagamentoApiTest {
 		
 		assertNotNull(pagamentoResponse.getTransacao().getId());
 		assertEquals(TipoFormaPagamento.AVISTA, pagamentoResponse.getTransacao().getFormaPagamento().getTipo());
+    }
+	
+	@Test
+    public void realizarPagamentoComCartaoInvalidoTest() throws Exception {
+		Pagamento pagamento = this.instanciarPagamentoVista();
+		pagamento.getTransacao().setCartao("5580260617905441");
+		
+        var pagamentoJson = this.pagamentoToJson(pagamento);
+        
+        Response response = given()
+					        .contentType(ContentType.JSON)
+					        .body(pagamentoJson)
+					        .post("/pagamento");
+		        
+		String responseBody = response.getBody().asString();
+		Pagamento pagamentoResponse = this.jsonToPagamento(responseBody);
+		
+		assertNotNull(pagamentoResponse.getTransacao().getId());
+		assertEquals(StatusPagamento.NEGADO, pagamentoResponse.getTransacao().getDescricao().getStatus());
     }
 	
 	@Test
@@ -124,6 +144,7 @@ public class PagamentoApiTest {
 	@Test
     public void estornarPagamentoTest() throws Exception {
 		Pagamento pagamento = this.instanciarPagamentoVista();
+		
         var pagamentoJson = this.pagamentoToJson(pagamento);
         
         Response response = given()
@@ -150,6 +171,7 @@ public class PagamentoApiTest {
 	@Test
     public void listarTodosPagamentosTest() throws Exception {
 		Pagamento pagamento = this.instanciarPagamentoVista();
+		
         var pagamentoJson = this.pagamentoToJson(pagamento);
         
         given()
@@ -171,6 +193,7 @@ public class PagamentoApiTest {
 	@Test
     public void buscarPagamentoPorId() throws Exception {
         Pagamento pagamento = this.instanciarPagamentoVista();
+        
         var pagamentoJson = this.pagamentoToJson(pagamento);
         
         Response response = given()
@@ -209,7 +232,7 @@ public class PagamentoApiTest {
         formaPagamento.setTipo(TipoFormaPagamento.AVISTA);
         
         Transacao transacao = new Transacao();
-        transacao.setCartao("1111222233334444");
+        transacao.setCartao("5580260617905440");
         transacao.setDescricao(descricao);
         transacao.setFormaPagamento(formaPagamento);
         
@@ -235,7 +258,7 @@ public class PagamentoApiTest {
         formaPagamento.setTipo(TipoFormaPagamento.PARCELADO_LOJA);
         
         Transacao transacao = new Transacao();
-        transacao.setCartao("1111222233334444");
+        transacao.setCartao("5580260617905440");
         transacao.setDescricao(descricao);
         transacao.setFormaPagamento(formaPagamento);
         
