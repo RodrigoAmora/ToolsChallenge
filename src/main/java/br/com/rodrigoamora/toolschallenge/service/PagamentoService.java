@@ -14,6 +14,7 @@ import br.com.rodrigoamora.toolschallenge.entity.TipoFormaPagamento;
 import br.com.rodrigoamora.toolschallenge.exception.BusinessValidationException;
 import br.com.rodrigoamora.toolschallenge.repository.PagamentoRepository;
 import br.com.rodrigoamora.toolschallenge.util.FormatadorDataHora;
+import br.com.rodrigoamora.toolschallenge.util.validator.CartaoValidator;
 
 @Component
 public class PagamentoService {
@@ -29,9 +30,15 @@ public class PagamentoService {
 		
 		this.verificarParcelasComTipoDePagamento(pagamento);
 		
-		long codigoAutorizacao = Math.abs(UUID.randomUUID().getMostSignificantBits());
-		pagamento.getTransacao().getDescricao().setCodigoAutorizacao(codigoAutorizacao);
-		pagamento.getTransacao().getDescricao().setStatus(StatusPagamento.AUTORIZADO);
+		if (CartaoValidator.validate(pagamento.getTransacao().getCartao())) {
+			long codigoAutorizacao = Math.abs(UUID.randomUUID().getMostSignificantBits());
+			pagamento.getTransacao().getDescricao().setCodigoAutorizacao(codigoAutorizacao);
+			pagamento.getTransacao().getDescricao().setStatus(StatusPagamento.AUTORIZADO);
+		} else {
+			pagamento.getTransacao().getDescricao().setStatus(StatusPagamento.NEGADO);
+		}
+		
+		pagamento.getTransacao().adicionarMascaraCartao();
 		
 		return this.pagamentoDao.save(pagamento);
 	}
@@ -67,4 +74,5 @@ public class PagamentoService {
 		
 		return true;
 	}
+	
 }
