@@ -37,6 +37,6 @@ O projeto possui testes de API.
 
 Rodando o projeto:
 ------------------
-O porjeto usa o Spring Boot, para usar rodá-lo basta executar a classe `ToolschallengeApplication`
+O porjeto usa o Spring Boot, para rodá-lo basta executar a classe `ToolschallengeApplication`
 
 <hr>
