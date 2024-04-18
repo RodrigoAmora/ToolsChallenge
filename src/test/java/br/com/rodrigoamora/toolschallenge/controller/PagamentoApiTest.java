@@ -30,7 +30,7 @@ import br.com.rodrigoamora.toolschallenge.entity.Pagamento;
 import br.com.rodrigoamora.toolschallenge.entity.StatusPagamento;
 import br.com.rodrigoamora.toolschallenge.entity.TipoFormaPagamento;
 import br.com.rodrigoamora.toolschallenge.entity.Transacao;
-import br.com.rodrigoamora.toolschallenge.service.PagamentoServiceImpl;
+import br.com.rodrigoamora.toolschallenge.service.impl.PagamentoServiceImpl;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import io.restassured.response.Response;

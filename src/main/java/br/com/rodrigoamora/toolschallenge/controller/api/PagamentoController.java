@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.com.rodrigoamora.toolschallenge.entity.Pagamento;
-import br.com.rodrigoamora.toolschallenge.service.PagamentoServiceImpl;
+import br.com.rodrigoamora.toolschallenge.service.impl.PagamentoServiceImpl;
 
 @RestController
 @RequestMapping("/pagamento")

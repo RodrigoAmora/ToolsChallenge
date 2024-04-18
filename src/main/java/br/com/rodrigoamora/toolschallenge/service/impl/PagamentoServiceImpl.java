@@ -1,4 +1,4 @@
-package br.com.rodrigoamora.toolschallenge.service;
+package br.com.rodrigoamora.toolschallenge.service.impl;
 
 import java.util.UUID;
 
@@ -13,11 +13,12 @@ import br.com.rodrigoamora.toolschallenge.entity.StatusPagamento;
 import br.com.rodrigoamora.toolschallenge.entity.TipoFormaPagamento;
 import br.com.rodrigoamora.toolschallenge.exception.BusinessValidationException;
 import br.com.rodrigoamora.toolschallenge.repository.PagamentoRepository;
+import br.com.rodrigoamora.toolschallenge.service.PagamentoService;
 import br.com.rodrigoamora.toolschallenge.util.FormatadorDataHora;
 import br.com.rodrigoamora.toolschallenge.util.validator.CartaoValidator;
 
 @Component
-public class PagamentoServiceImpl {
+public class PagamentoServiceImpl implements PagamentoService {
 
 	@Autowired
 	PagamentoRepository pagamentoDao;
