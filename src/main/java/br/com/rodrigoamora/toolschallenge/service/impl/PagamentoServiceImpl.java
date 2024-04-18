@@ -31,9 +31,10 @@ public class PagamentoServiceImpl implements PagamentoService {
 		
 		this.verificarParcelasComTipoDePagamento(pagamento);
 		
+		long codigoAutorizacao = Math.abs(UUID.randomUUID().getMostSignificantBits());
+		pagamento.getTransacao().getDescricao().setCodigoAutorizacao(codigoAutorizacao);
+		
 		if (CartaoValidator.validate(pagamento.getTransacao().getCartao())) {
-			long codigoAutorizacao = Math.abs(UUID.randomUUID().getMostSignificantBits());
-			pagamento.getTransacao().getDescricao().setCodigoAutorizacao(codigoAutorizacao);
 			pagamento.getTransacao().getDescricao().setStatus(StatusPagamento.AUTORIZADO);
 		} else {
 			pagamento.getTransacao().getDescricao().setStatus(StatusPagamento.NEGADO);
