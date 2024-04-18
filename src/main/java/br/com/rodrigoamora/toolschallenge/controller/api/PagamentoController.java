@@ -12,14 +12,14 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.com.rodrigoamora.toolschallenge.entity.Pagamento;
-import br.com.rodrigoamora.toolschallenge.service.PagamentoService;
+import br.com.rodrigoamora.toolschallenge.service.PagamentoServiceImpl;
 
 @RestController
 @RequestMapping("/pagamento")
 public class PagamentoController {
 
 	@Autowired
-	PagamentoService pagamentoService;
+	PagamentoServiceImpl pagamentoService;
 	
 	@PostMapping
 	public Pagamento realizarPagamento(@RequestBody Pagamento pagamento) {

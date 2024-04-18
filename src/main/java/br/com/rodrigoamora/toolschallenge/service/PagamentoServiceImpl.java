@@ -17,7 +17,7 @@ import br.com.rodrigoamora.toolschallenge.util.FormatadorDataHora;
 import br.com.rodrigoamora.toolschallenge.util.validator.CartaoValidator;
 
 @Component
-public class PagamentoService {
+public class PagamentoServiceImpl {
 
 	@Autowired
 	PagamentoRepository pagamentoDao;
@@ -45,8 +45,7 @@ public class PagamentoService {
 
 	public Page<Pagamento> listarTodos(int page, int size) {
         PageRequest pageRequest = PageRequest.of(page, size, Sort.Direction.ASC, "id");
-
-        return pagamentoDao.findAll(pageRequest);
+        return this.pagamentoDao.findAll(pageRequest);
     }
 	
 	public Pagamento buscarPagamentoPorId(Long pagamentoId) {
