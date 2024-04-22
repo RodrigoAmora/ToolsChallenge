@@ -11,4 +11,8 @@ public interface PagamentoService {
 	public Pagamento buscarPagamentoPorId(Long pagamentoId);
 	public Pagamento estonarPagamento(Long transacaoId);
 	
+	public Page<Pagamento> buscarPagamentoComStatusAutorizado(int page, int size);
+	public Page<Pagamento> buscarPagamentoComStatusCancelado(int page, int size);
+	public Page<Pagamento> buscarPagamentoComStatusNegado(int page, int size);
+	
 }

@@ -42,4 +42,22 @@ public class PagamentoController {
 		return this.pagamentoService.estonarPagamento(id);
 	}
 	
+	@GetMapping("/autorizado")
+	public Page<Pagamento> buscarPagamentoComStatusAutorizado(@RequestParam(value = "page", required = false, defaultValue = "0") int page,
+			   										          @RequestParam(value = "size", required = false, defaultValue = "10") int size) {
+		return this.pagamentoService.buscarPagamentoComStatusAutorizado(page, size);
+	}
+	
+	@GetMapping("/cancelado")
+	public Page<Pagamento> buscarPagamentoComStatusCancelado(@RequestParam(value = "page", required = false, defaultValue = "0") int page,
+			   										         @RequestParam(value = "size", required = false, defaultValue = "10") int size) {
+		return this.pagamentoService.buscarPagamentoComStatusCancelado(page, size);
+	}
+
+	@GetMapping("/negado")
+	public Page<Pagamento> buscarPagamentoComStatusNegado(@RequestParam(value = "page", required = false, defaultValue = "0") int page,
+			   										      @RequestParam(value = "size", required = false, defaultValue = "10") int size) {
+		return this.pagamentoService.buscarPagamentoComStatusNegado(page, size);
+	}
+	
 }

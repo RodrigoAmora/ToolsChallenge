@@ -75,5 +75,23 @@ public class PagamentoServiceImpl implements PagamentoService {
 		
 		return true;
 	}
+
+	@Override
+	public Page<Pagamento> buscarPagamentoComStatusAutorizado(int page, int size) {
+		PageRequest pageRequest = PageRequest.of(page, size, Sort.Direction.ASC, "id");
+		return this.pagamentoDao.buscarPagamentoComStatusAutorizado(pageRequest);
+	}
+	
+	@Override
+	public Page<Pagamento> buscarPagamentoComStatusCancelado(int page, int size) {
+		PageRequest pageRequest = PageRequest.of(page, size, Sort.Direction.ASC, "id");
+		return this.pagamentoDao.buscarPagamentoComStatusCancelado(pageRequest);
+	}
+
+	@Override
+	public Page<Pagamento> buscarPagamentoComStatusNegado(int page, int size) {
+		PageRequest pageRequest = PageRequest.of(page, size, Sort.Direction.ASC, "id");
+		return this.pagamentoDao.buscarPagamentoComStatusNegado(pageRequest);
+	}
 	
 }
