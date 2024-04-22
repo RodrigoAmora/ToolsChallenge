@@ -1,4 +1,6 @@
 # ToolsChallenge
+Descrição:
+----------
 Projeto de uma API em Java e Spring Boot para simular pagamentos.
 
 <hr>
@@ -20,6 +22,7 @@ Este projeto usa o Java 21 e as seguintes dependências:
 * Spring Boot 3.2.4
 * Spring Security
 * Swagger
+* OpenAPI
 * JPA
 * Devtools
 * jUnit
