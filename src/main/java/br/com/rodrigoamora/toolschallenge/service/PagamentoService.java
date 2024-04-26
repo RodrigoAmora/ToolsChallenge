@@ -9,7 +9,7 @@ public interface PagamentoService {
 	public Pagamento realizarPagamento(Pagamento pagamento);
 	public Page<Pagamento> listarTodos(int page, int size);
 	public Pagamento buscarPagamentoPorId(Long pagamentoId);
-	public Pagamento estonarPagamento(Long transacaoId);
+	public Pagamento estonarPagamento(Pagamento pagamento);
 	
 	public Page<Pagamento> buscarPagamentoComStatusAutorizado(int page, int size);
 	public Page<Pagamento> buscarPagamentoComStatusCancelado(int page, int size);

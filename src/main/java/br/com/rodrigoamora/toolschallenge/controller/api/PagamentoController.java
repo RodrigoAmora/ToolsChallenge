@@ -2,6 +2,7 @@ package br.com.rodrigoamora.toolschallenge.controller.api;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -33,13 +34,26 @@ public class PagamentoController {
 	}
 	
 	@GetMapping("/{pagamentoId}")
-	public Pagamento buscarPagamentoPorId(@PathVariable(name = "pagamentoId") Long pagamentoId) {
-		return this.pagamentoService.estonarPagamento(pagamentoId);
+	public ResponseEntity<Pagamento> buscarPagamentoPorId(@PathVariable(name = "pagamentoId") Long pagamentoId) {
+		Pagamento pagamento = this.pagamentoService.buscarPagamentoPorId(pagamentoId);
+
+		if (pagamento != null) {
+			return ResponseEntity.ok(pagamento);
+		}
+		
+		return ResponseEntity.notFound().build();
 	}
 	
 	@PutMapping("/{id}/estornar")
-	public Pagamento estornarPagamento(@PathVariable(name = "id") Long id) {
-		return this.pagamentoService.estonarPagamento(id);
+	public ResponseEntity<Pagamento> estornarPagamento(@PathVariable(name = "id") Long id) {
+		Pagamento pagamento = this.pagamentoService.buscarPagamentoPorId(id);
+		
+		if (pagamento != null) {
+			pagamento = this.pagamentoService.estonarPagamento(pagamento);
+			return ResponseEntity.ok(pagamento);
+		}
+		
+		return ResponseEntity.notFound().build();
 	}
 	
 	@GetMapping("/autorizado")

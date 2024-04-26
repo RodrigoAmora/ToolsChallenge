@@ -54,8 +54,7 @@ public class PagamentoServiceImpl implements PagamentoService {
 		return this.pagamentoDao.findById(pagamentoId).get();
 	}
 	
-	public Pagamento estonarPagamento(Long transacaoId) {
-		Pagamento pagamento = this.pagamentoDao.findById(transacaoId).get();
+	public Pagamento estonarPagamento(Pagamento pagamento) {
 		pagamento.getTransacao().getDescricao().setStatus(StatusPagamento.CANCELADO);
 		return this.pagamentoDao.save(pagamento);
 	}
