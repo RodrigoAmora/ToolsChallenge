@@ -40,6 +40,19 @@ O projeto possui testes de API.
 
 Rodando o projeto:
 ------------------
-O porjeto usa o Spring Boot, para rodá-lo basta executar a classe `ToolschallengeApplication`
+Para iniciar a aplicação via IDE, execute a classe `EventostiApplication`
+
+Para iniciar a aplicação via terminal, execute o comando no terminal na raiz do projeto:
+
+```shell script
+mvn spring-boot:run
+```
+
+# Autor
+<b>Rodrigo Amora</b>
+
+LinkedIn: https://linkedin.com/in/rodrigoamora
+
+E-mail: rodrigo.amora.freitas@gmail.com
 
 <hr>
