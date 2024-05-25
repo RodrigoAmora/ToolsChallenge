@@ -20,13 +20,15 @@ Dependências:
 -------------
 Este projeto usa o Java 21 e as seguintes dependências:
 * Spring Boot 3.2.4
+* Spring Data JPA
 * Spring Security
 * Swagger
 * OpenAPI
-* JPA
 * Devtools
 * jUnit
 * Rest-Assured
+* MySQL
+* H2
 
 Banco de dados:
 ---------------
