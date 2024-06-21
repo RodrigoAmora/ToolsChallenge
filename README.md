@@ -52,5 +52,3 @@ Autor:
 
 LinkedIn: https://linkedin.com/in/rodrigoamora <br>
 E-mail: rodrigo.amora.freitas@gmail.com
-
-<hr>
