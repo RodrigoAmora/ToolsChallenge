@@ -3,16 +3,11 @@ Descrição:
 ----------
 Projeto de uma API em Java e Spring Boot para simular pagamentos.
 
-<hr>
-
 Endpoints:
 ----------
 A documentação dos endpoints da API pode ser vista através do Swagger e do Redoc.<br>
-
 Para consultar a documentação dos endpoints através do Swagger: `<URL_DO_PORJETO>/swagger-ui.html` <br>
-
 Para consultar a documentação dos endpoints através do Redoc: `<URL_DO_PORJETO>/redoc.html` <br>
-
 Caso prefira usar o Postman, na pasta collections tem o arquivo com a collection para usar os endpoints via Postman.
 
 
@@ -50,11 +45,11 @@ Para iniciar a aplicação via terminal, execute o comando no terminal na raiz d
 mvn spring-boot:run
 ```
 
-# Autor
+Autor:
+------
 <b>Rodrigo Amora</b>
 
-LinkedIn: https://linkedin.com/in/rodrigoamora
-
+LinkedIn: https://linkedin.com/in/rodrigoamora <br>
 E-mail: rodrigo.amora.freitas@gmail.com
 
 <hr>
