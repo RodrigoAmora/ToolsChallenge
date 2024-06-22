@@ -34,7 +34,7 @@ Para acessar o painel do H2: `<URL_DO_PORJETO>/h2-console`
 
 Testes:
 -------
-O projeto possui testes de API.
+O projeto possui testes de API usando o Rest-Assured.
 
 Rodando o projeto:
 ------------------
