@@ -34,7 +34,11 @@ Para acessar o painel do H2: `<URL_DO_PORJETO>/h2-console`
 
 Testes:
 -------
-O projeto possui testes de API usando o Rest-Assured.
+O projeto possui testes de API usando o Rest-Assured.<br><br>
+Para rodar os testes, execute o comando no terminal na raiz do projeto com o projeto rodando:
+```shell script
+mvn test
+```
 
 Rodando o projeto:
 ------------------
