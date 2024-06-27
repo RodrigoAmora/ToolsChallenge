@@ -10,8 +10,7 @@ A documentação dos endpoints da API pode ser vista através do Swagger e do Re
 Para consultar a documentação dos endpoints através do Swagger: `<URL_DO_PORJETO>/swagger-ui.html` <br>
 Para consultar a documentação dos endpoints através do Redoc: `<URL_DO_PORJETO>/redoc.html` <br>
 
-Caso prefira usar o Postman, na pasta collections tem o arquivo com a collection para usar os endpoints via Postman.
-
+Na pasta Postman tem o arquivo a collection para usar os endpoints via Postman.
 
 Dependências:
 -------------
@@ -22,10 +21,10 @@ Este projeto usa o Java 21 e as seguintes dependências:
 * Swagger
 * OpenAPI
 * Devtools
-* jUnit
-* Rest-Assured
 * MySQL
 * H2
+* jUnit
+* Rest-Assured
 
 Banco de dados:
 ---------------
