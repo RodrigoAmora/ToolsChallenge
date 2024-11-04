@@ -1,0 +1,41 @@
+version: "3.7"
+services:
+  mysql-service:
+    image: mysql/mysql-server:8.0.32-1.2.11-server
+    command: --default-authentication-plugin=mysql_native_password
+    container_name: 'mysql-server'
+    volumes:
+      - /var/lib/mysql:/var/lib/mysql
+    networks:
+      - spring-boot-mysql-network
+    restart: always
+    environment:
+      - MYSQL_USER=root
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_PASSWORD=rodrigo@1988
+      - MYSQL_DATABASE=eventos_ti
+      - MYSQL_ROOT_HOST=127.0.0.1
+    ports:
+      - "3306:3306"
+    expose:
+      - '3306'
+  spring:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: rodrigoamora/rodrigo-springboot
+    container_name: 'toolschallenge'
+    ports:
+      - "80:8080"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql-service:3306/eventos_ti?createDatabaseIfNotExist=true
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: rodrigo@1988
+      SPRING_PROFILES_ACTIVE: docker
+    networks:
+      - spring-boot-mysql-network
+    depends_on:
+      - mysql-service
+networks:
+  spring-boot-mysql-network:
+    driver: bridge
