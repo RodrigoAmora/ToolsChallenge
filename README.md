@@ -22,7 +22,7 @@ Na pasta <b>`Postman`</b> contém a collection para usar os endpoints via Postma
 
 Dependências:
 -------------
-Este projeto usa o Java 21 e as seguintes dependências:
+O projeto usa as seguintes dependências:
 * Spring Boot 3.2.4
 * Spring Data JPA
 * Spring Security
