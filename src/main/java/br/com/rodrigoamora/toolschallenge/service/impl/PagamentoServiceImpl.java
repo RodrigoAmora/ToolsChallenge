@@ -34,7 +34,7 @@ public class PagamentoServiceImpl implements PagamentoService {
 		long codigoAutorizacao = Math.abs(UUID.randomUUID().getMostSignificantBits());
 		pagamento.getTransacao().getDescricao().setCodigoAutorizacao(codigoAutorizacao);
 		
-		if (CartaoValidator.validate(pagamento.getTransacao().getCartao())) {
+		if (verificarCartaoValido(pagamento.getTransacao().getCartao())) {
 			pagamento.getTransacao().getDescricao().setStatus(StatusPagamento.AUTORIZADO);
 		} else {
 			pagamento.getTransacao().getDescricao().setStatus(StatusPagamento.NEGADO);
@@ -92,5 +92,7 @@ public class PagamentoServiceImpl implements PagamentoService {
 		PageRequest pageRequest = PageRequest.of(page, size, Sort.Direction.ASC, "id");
 		return this.pagamentoDao.buscarPagamentoComStatusNegado(pageRequest);
 	}
-	
+	private boolean verificarCartaoValido(String cartao) {
+		return CartaoValidator.validate(cartao.replaceAll(" ", ""));
+	}
 }
