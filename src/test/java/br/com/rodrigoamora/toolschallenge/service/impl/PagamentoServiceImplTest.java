@@ -12,7 +12,6 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.test.context.ActiveProfiles;
 
-import java.math.BigDecimal;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -56,7 +55,6 @@ class PagamentoServiceImplTest {
 
     @Test
     void testRealizarPagamentoComCartaoValido() {
-        // Configurando o mock do CartaoValidator e do repository.
         when(pagamentoRepository.save(any(Pagamento.class))).thenAnswer(invocation -> {
             Pagamento pagamento = invocation.getArgument(0);
             pagamento.setId(1L); // Setando o ID para simular persistência.
@@ -64,10 +62,8 @@ class PagamentoServiceImplTest {
         });
         mockStaticMethods(true); // Simulando cartão válido.
 
-        // Executando o método.
         Pagamento pagamentoRealizado = pagamentoService.realizarPagamento(pagamentoMock);
 
-        // Verificações.
         assertNotNull(pagamentoRealizado);
         assertNotNull(pagamentoRealizado.getId());
         assertNotNull(pagamentoRealizado.getTransacao().getDescricao().getDataHora());
@@ -82,7 +78,7 @@ class PagamentoServiceImplTest {
     @Test
     void testRealizarPagamentoComCartaoInvalido() {
         pagamentoMock.getTransacao().setCartao("1234 4872 8195 2983");
-        // Configurando o mock do CartaoValidator e do repository.
+
         when(pagamentoRepository.save(any(Pagamento.class))).thenAnswer(invocation -> {
             Pagamento pagamento = invocation.getArgument(0);
             pagamento.setId(1L); // Setando o ID para simular persistência.
@@ -90,10 +86,9 @@ class PagamentoServiceImplTest {
         });
         mockStaticMethods(false); // Simulando cartão inválido.
 
-        // Executando o método.
         Pagamento pagamentoRealizado = pagamentoService.realizarPagamento(pagamentoMock);
 
-        // Verificações.
+
         assertNotNull(pagamentoRealizado);
         assertNotNull(pagamentoRealizado.getId());
         assertNotNull(pagamentoRealizado.getTransacao().getDescricao().getDataHora());
@@ -101,7 +96,7 @@ class PagamentoServiceImplTest {
         assertNotNull(pagamentoRealizado.getTransacao().getDescricao().getCodigoAutorizacao());
         assertTrue(pagamentoRealizado.getTransacao().getCartao().contains("********"));
 
-        // Verificando interação com o mock.
+
         verify(pagamentoRepository, times(1)).save(pagamentoMock);
     }
 
