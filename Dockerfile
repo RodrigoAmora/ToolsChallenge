@@ -1,37 +1,14 @@
-# Define a imagem base
-FROM openjdk:17-oracle
+# Build stage
+FROM maven:3.9-amazoncorretto-17 AS build
+WORKDIR /build
+COPY . .
+RUN mvn clean package -DskipTests
 
-LABEL maintainer="rodrigo.amora.freitas@gmail.com"
-LABEL version="1.0.7"
-LABEL name="Rodrigo Amora"
 
-# Define as variáveis AAP_NAME e VERSION
-ENV APP_NAME=toolschallenge
-ENV VERSION=0.0.1-SNAPSHOT
-
-# Copia o arquivo JAR do seu projeto para dentro do container
-COPY ./target/${APP_NAME}-${VERSION}.jar  /app/${APP_NAME}.jar
-
-# Define o diretório de trabalho
+# Run stage
+FROM eclipse-temurin:17-jdk-alpine
 WORKDIR /app
-
-COPY mvnw .
-COPY .mvn .mvn
-COPY pom.xml .
-
-RUN chmod +x ./mvnw
-
-# Faça o download das dependencias do pom.xml
-RUN ./mvnw dependency:go-offline -B
-
-COPY src src
-
-RUN ./mvnw package -Pdocker -DskipTests
-RUN mkdir -p target/dependency && (cd target/dependency; jar -xf ../*.jar)
-
-
-# Define o comando de inicialização do seu projeto
-CMD java -jar ${APP_NAME}.jar
-
-# Expõe a porta do seu projeto
-EXPOSE 80 8080
+COPY --from=build /build/target/*.jar app.jar
+RUN mkdir -p /uploads /outputs
+EXPOSE 8082
+ENTRYPOINT ["java", "-jar", "app.jar"]
