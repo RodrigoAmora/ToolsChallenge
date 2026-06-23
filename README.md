@@ -26,12 +26,12 @@ O projeto usa as seguintes dependências:
 * Spring Boot 3.2.4
 * Spring Data JPA
 * Spring Security
-* Swagger
-* OpenAPI
+* Swagger/OpenAPI
 * Devtools
 * MySQL
 * H2
 * jUnit
+* Mockito
 * Rest-Assured
 
 Banco de dados:
