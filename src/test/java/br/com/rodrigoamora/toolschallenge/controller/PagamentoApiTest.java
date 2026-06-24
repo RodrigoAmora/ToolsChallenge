@@ -30,7 +30,7 @@ import br.com.rodrigoamora.toolschallenge.entity.Pagamento;
 import br.com.rodrigoamora.toolschallenge.entity.StatusPagamento;
 import br.com.rodrigoamora.toolschallenge.entity.TipoFormaPagamento;
 import br.com.rodrigoamora.toolschallenge.entity.Transacao;
-import br.com.rodrigoamora.toolschallenge.service.impl.PagamentoServiceImpl;
+import br.com.rodrigoamora.toolschallenge.service.PagamentoService;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import io.restassured.response.Response;
@@ -47,7 +47,7 @@ public class PagamentoApiTest {
 	private ObjectMapper objectMapper;
 	
 	@MockBean
-	private PagamentoServiceImpl pagamentoService;
+	private PagamentoService pagamentoService;
 	
 	@BeforeClass
 	public static void setup() {

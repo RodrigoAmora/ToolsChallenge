@@ -2,6 +2,7 @@ package br.com.rodrigoamora.toolschallenge.service.impl;
 
 import br.com.rodrigoamora.toolschallenge.entity.*;
 import br.com.rodrigoamora.toolschallenge.repository.PagamentoRepository;
+import br.com.rodrigoamora.toolschallenge.service.PagamentoService;
 import br.com.rodrigoamora.toolschallenge.util.FormatadorDataHora;
 import br.com.rodrigoamora.toolschallenge.util.validator.CartaoValidator;
 import org.junit.jupiter.api.BeforeEach;
@@ -20,13 +21,13 @@ import static org.mockito.Mockito.*;
 
 @ActiveProfiles("test")
 @ExtendWith(MockitoExtension.class)
-class PagamentoServiceImplTest {
+class PagamentoServiceTest {
 
     @Mock
     private PagamentoRepository pagamentoRepository;
 
     @InjectMocks
-    private PagamentoServiceImpl pagamentoService;
+    private PagamentoService pagamentoService;
 
     private Pagamento pagamentoMock;
 
