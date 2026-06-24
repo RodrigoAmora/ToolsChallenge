@@ -1,7 +1,9 @@
 package br.com.rodrigoamora.toolschallenge.service;
 
+import java.time.LocalDateTime;
 import java.util.UUID;
 
+import br.com.rodrigoamora.toolschallenge.exception.BusinessException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -13,6 +15,7 @@ import br.com.rodrigoamora.toolschallenge.exception.BusinessValidationException;
 import br.com.rodrigoamora.toolschallenge.repository.PagamentoRepository;
 import br.com.rodrigoamora.toolschallenge.util.FormatadorDataHora;
 import br.com.rodrigoamora.toolschallenge.util.validator.CartaoValidator;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -23,9 +26,13 @@ public class PagamentoService {
 	public Pagamento realizarPagamento(Pagamento pagamento) {
 		String padraoDataHora = "dd/MM/yyyy HH:mm:ss";
 		String dataHoraFormatada = FormatadorDataHora.formatarDataHora(padraoDataHora);
-		
+
+		LocalDateTime dataPagamento = LocalDateTime.parse(dataHoraFormatada);
+		if (dataPagamento.isAfter(LocalDateTime.now())) {
+			throw new BusinessException("Data e hora inválida", HttpStatus.FORBIDDEN);
+		}
 		pagamento.getTransacao().getDescricao().setDataHora(dataHoraFormatada);
-		
+
 		this.verificarParcelasComTipoDePagamento(pagamento);
 		
 		long codigoAutorizacao = Math.abs(UUID.randomUUID().getMostSignificantBits());
@@ -57,16 +64,20 @@ public class PagamentoService {
 	}
 	
 	private Boolean verificarParcelasComTipoDePagamento(Pagamento pagamento) {
+		if (pagamento.getTransacao().getFormaPagamento() == null) {
+			throw new BusinessException("Forma de pagamento nao informada.", HttpStatus.FORBIDDEN);
+		}
+
 		TipoFormaPagamento tipoFormaPagamento = pagamento.getTransacao().getFormaPagamento().getTipo();
 		Integer parcelas = pagamento.getTransacao().getFormaPagamento().getParcelas();
 		
 		if (tipoFormaPagamento == TipoFormaPagamento.AVISTA && parcelas > 1) {
-			throw new BusinessValidationException("Tipo de pagamento a vista nao pode ter mais que 1 parcela.");
+			throw new BusinessException("Tipo de pagamento a vista nao pode ter mais que 1 parcela.", HttpStatus.FORBIDDEN);
 		}
 		
 		if ((tipoFormaPagamento == TipoFormaPagamento.PARCELADO_EMISSOR || tipoFormaPagamento == TipoFormaPagamento.PARCELADO_LOJA)
 				&& parcelas < 2 ) {
-			throw new BusinessValidationException("Tipo de pagamento parcelado precisa ter no minimo 2 parcelas.");
+			throw new BusinessException("Tipo de pagamento parcelado precisa ter no minimo 2 parcelas.", HttpStatus.FORBIDDEN);
 		}
 		
 		return true;
