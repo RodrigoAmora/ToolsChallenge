@@ -12,7 +12,11 @@ import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Positive;
+import lombok.Data;
+import lombok.RequiredArgsConstructor;
 
+@Data
+@RequiredArgsConstructor
 @Entity
 @Table(name = "descricao")
 public class Descricao {
@@ -42,69 +46,5 @@ public class Descricao {
     @OneToOne(mappedBy = "descricao")
     @JsonIgnore
     private Transacao transacao;
-	
-    public Long getId() {
-		return id;
-	}
 
-	public void setId(Long id) {
-		this.id = id;
-	}
-	
-	public Double getValor() {
-		return valor;
-	}
-	
-	public void setValor(Double valor) {
-		this.valor = valor;
-	}
-	
-	public String getDataHora() {
-		return dataHora;
-	}
-	
-	public void setDataHora(String dataHora) {
-		this.dataHora = dataHora;
-	}
-	
-	public String getEstabelecimento() {
-		return estabelecimento;
-	}
-	
-	public void setEstabelecimento(String estabelecimento) {
-		this.estabelecimento = estabelecimento;
-	}
-	
-	public String getNsu() {
-		return nsu;
-	}
-	
-	public void setNsu(String nsu) {
-		this.nsu = nsu;
-	}
-	
-	public Long getCodigoAutorizacao() {
-		return codigoAutorizacao;
-	}
-	
-	public void setCodigoAutorizacao(Long codigoAutorizacao) {
-		this.codigoAutorizacao = codigoAutorizacao;
-	}
-	
-	public StatusPagamento getStatus() {
-		return status;
-	}
-	
-	public void setStatus(StatusPagamento status) {
-		this.status = status;
-	}
-
-	public Transacao getTransacao() {
-		return transacao;
-	}
-
-	public void setTransacao(Transacao transacao) {
-		this.transacao = transacao;
-	}
-	
 }

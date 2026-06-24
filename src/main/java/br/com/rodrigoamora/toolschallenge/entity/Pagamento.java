@@ -10,7 +10,11 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
+import lombok.Data;
+import lombok.RequiredArgsConstructor;
 
+@Data
+@RequiredArgsConstructor
 @Entity
 @Table(name = "pagamentos")
 public class Pagamento {
@@ -23,21 +27,5 @@ public class Pagamento {
 	@OneToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "transacao_id", referencedColumnName = "id")
 	private Transacao transacao;
-
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
-	}
-
-	public Transacao getTransacao() {
-		return transacao;
-	}
-
-	public void setTransacao(Transacao transacao) {
-		this.transacao = transacao;
-	}
 	
 }

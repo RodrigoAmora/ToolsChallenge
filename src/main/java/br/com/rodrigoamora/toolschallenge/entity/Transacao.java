@@ -11,7 +11,11 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
+import lombok.Data;
+import lombok.RequiredArgsConstructor;
 
+@Data
+@RequiredArgsConstructor
 @Entity
 @Table(name = "transacoes")
 public class Transacao {
@@ -34,47 +38,7 @@ public class Transacao {
 	@OneToOne(mappedBy = "transacao")
     @JsonIgnore
     private Pagamento pagamento;
-	
-	public Long getId() {
-		return id;
-	}
-	
-	public void setId(Long id) {
-		this.id = id;
-	}
-	
-	public String getCartao() {
-		return cartao;
-	}
-	
-	public void setCartao(String cartao) {
-		this.cartao = cartao;
-	}
-	
-	public Descricao getDescricao() {
-		return descricao;
-	}
-	
-	public void setDescricao(Descricao descricao) {
-		this.descricao = descricao;
-	}
-	
-	public FormaPagamento getFormaPagamento() {
-		return formaPagamento;
-	}
-	
-	public void setFormaPagamento(FormaPagamento formaPagamento) {
-		this.formaPagamento = formaPagamento;
-	}
 
-	public Pagamento getPagamento() {
-		return pagamento;
-	}
-
-	public void setPagamento(Pagamento pagamento) {
-		this.pagamento = pagamento;
-	}
-	
 	public void adicionarMascaraCartao() {
 		String cartaoSubSequence = cartao.subSequence(4, 12).toString();
 		this.setCartao(cartao.replace(cartaoSubSequence, "********"));
