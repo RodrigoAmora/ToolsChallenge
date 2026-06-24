@@ -4,25 +4,26 @@
 ### Shellscript to up Docker's containers ###
 #############################################
 
+source ~/.bash_profile
+
+### Application ###
 rm -rf target/
+export $(grep -v '^#' .env | xargs)
 mvn clean install -Pdocker -DskipTests
 
-
-echo -e "\n\n"
+### Docker ###
+echo -e "\n"
 echo -e "\033[01;32m##############\033[01;32m"
 echo -e "\033[01;32m### Docker ###\033[01;32m"
 echo -e "\033[01;32m##############\033[01;32m"
 echo -e "\n"
 
-docker_image=$(docker images rodrigoamora/rodrigo-springboot)
+sudo docker rmi -f rodrigoamora/rodrigo-springboot
 
-if [[ ! -z "${docker_image}" ]]; then
-	echo -e "\033[01;32mDeleting image that run application....\033[01;32m"
-	echo -e "\n"
-	docker rmi -f rodrigoamora/rodrigo-springboot
-	echo -e "\n"
-fi
+docker-compose down
+docker-compose down --rmi rodrigoamora/rodrigo-springboot
 
+echo -e "\n\n"
 echo -e "\033[01;32m###########################\033[01;32m"
 echo -e "\033[01;32m### Building images.... ###\033[01;32m"
 echo -e "\033[01;32m###########################\033[01;32m"
@@ -32,14 +33,46 @@ sudo docker-compose build
 
 echo -e "\n\n"
 echo -e "\033[01;32m########################\033[01;32m"
-echo -e "\033[01;32m### Uping containers ###\033[01;32m"
+echo -e "\033[01;32m### Upping containers ###\033[01;32m"
 echo -e "\033[01;32m########################\033[01;32m"
 echo -e "\n\n"
 
-sudo docker-compose up -d
+if [[ $(uname -s) == "Darwin" ]]; then
+  echo -e "\n"
+  echo "Running on MacOS, forcing linux/amd64"
+  echo -e "\n"
 
-echo -e "\n\n"
-echo -e "\033[01;32m#############################\033[01;32m"
-echo -e "\033[01;32m### Aplicação rodando!!!! ###\033[01;32m"
-echo -e "\033[01;32m#############################\033[01;32m"
+  echo -e "\n"
+  echo -e "\033[01;32m### Building images.... ###\033[01;32m"
+  echo -e "\n"
 
+  sudo docker-compose -f docker-compose-mac.yml build --no-cache
+
+  echo -e "\n"
+  echo -e "\033[01;32m### Upping containers ###\033[01;32m"
+  echo -e "\n"
+
+  sudo docker-compose -f docker-compose-mac.yml up -d --force-recreate
+
+else
+  echo -e "\n"
+  echo "Running on Linux/Windows"
+  echo -e "\n"
+
+  echo -e "\n"
+  echo -e "\033[01;32m### Building images.... ###\033[01;32m"
+  echo -e "\n"
+
+  sudo docker-compose build --no-cache
+
+  echo -e "\n"
+  echo -e "\033[01;32m### Upping containers ###\033[01;32m"
+  echo -e "\n"
+
+  sudo docker-compose up -d --force-recreate
+fi
+
+echo -e "\n"
+echo -e "\033[01;32m###############################\033[01;32m"
+echo -e "\033[01;32m### Application running!!!! ###\033[01;32m"
+echo -e "\033[01;32m###############################\033[01;32m"
